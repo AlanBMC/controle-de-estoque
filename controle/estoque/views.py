@@ -9,6 +9,7 @@ from django.http import JsonResponse
 
 
 # Create your views here.
+@login_required(login_url="/cafe/login_user/")
 def cadastro_usuario(request):
     if request.method == 'POST':
         nome = request.POST.get('nome')
@@ -37,12 +38,12 @@ def login_user(request):
     else:
         return render(request, 'login.html')
 
-
+@login_required(login_url="/cafe/login_user/")
 def home_page(request):
     
     return render(request, 'home.html')
     
 def logout_view(request):
     logout(request)
-    return redirect('login_user')
+    return redirect('login')
 
