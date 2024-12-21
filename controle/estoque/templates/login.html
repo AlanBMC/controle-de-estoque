@@ -9,16 +9,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{%static 'css/login.css' %}">
     <script src="https://unpkg.com/htmx.org@1.8.5"></script>
-    <title>Cadastro</title>
+    <title>Login</title>
 </head>
 <body>
-    <form hx-post="{% url 'login' %}" hx-trigger="submit" hx-target="#mensagem-alerta">  {% csrf_token %}
+    <form action="{% url 'login' %}" method="POST">  {% csrf_token %}
       
         <div class="card">
             <span class="card__title">Login</span>
             <!-- REF ELEMENTO  -->
             <div id="mensagem-alerta">
-                {% include 'componente/alerta.html' %}
+                {%if error %}
+                
+                <span class="badge bg-danger">{{error}}</span>
+            
+                {%endif%}
+            
+                {% if sucesso %}
+                <span class="badge bg-success">{{sucesso}}</span>
+                {%endif%}
             </div>
             <!-- REF ELEMENTO -->
             <div class="card__form">
@@ -28,7 +36,7 @@
                 <input placeholder="Senha" type="password" name="senha">
             </div>
             <div class="card__form">
-                <button class="sign-up" type="submit"> Cadastrar</button>
+                <button class="sign-up" type="submit"> Entrar </button>
             </div>
         </div>
     </form>

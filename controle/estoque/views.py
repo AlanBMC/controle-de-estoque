@@ -24,7 +24,7 @@ def cadastro_usuario(request):
             return render(request, 'componente/alerta.html', {'sucesso': 'Usuario cadastrado'})
             #redirecionar para login
     else:
-        return render(request, 'cadastro_usuario.html')
+        return render(request, 'configuracao.html') 
 
 def login_user(request):
     if request.method == 'POST':
