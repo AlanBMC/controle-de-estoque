@@ -1,0 +1,11 @@
+<div id="mensagem-alerta">
+    {%if error %}
+    
+    <span class="badge bg-danger">{{error}}</span>
+
+    {%endif%}
+
+    {% if sucesso %}
+    <span class="badge bg-success">{{sucesso}}</span>
+    {%endif%}
+</div>
