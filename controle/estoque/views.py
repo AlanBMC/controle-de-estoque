@@ -33,10 +33,15 @@ def login_user(request):
         user = authenticate(username=nome, password=senha)
         if user:
             login_django(request, user)
-            return render(request, 'home.html')
+            return redirect('home')
     else:
         return render(request, 'login.html')
 
+
+def home_page(request):
+    
+    return render(request, 'home.html')
+    
 def logout_view(request):
     logout(request)
     return redirect('login_user')

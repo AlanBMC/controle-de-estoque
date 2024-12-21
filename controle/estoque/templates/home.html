@@ -7,51 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
     <link rel="stylesheet" href="{%static 'css/home.css' %}">
+ 
     <script src="https://unpkg.com/htmx.org@1.8.5"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-       
-    </style>
+   
 </head>
-<body class="bg-gray-100">
-    <div class="flex h-screen">
-        <!-- Sidebar -->
-        <div class="w-64 bg-white shadow-md h-full fixed transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out" id="sidebar">
-            <div class="p-6">
-                <a href="#" class="text-2xl font-bold text-blue-600">MinhaLogo</a>
-            </div>
-            <nav class="mt-10">
-                <a href="#" class="block py-2.5 px-4 text-gray-600 hover:bg-blue-100 hover:text-blue-600">Início</a>
-                <a href="#" class="block py-2.5 px-4 text-gray-600 hover:bg-blue-100 hover:text-blue-600">Sobre</a>
-                <a href="#" class="block py-2.5 px-4 text-gray-600 hover:bg-blue-100 hover:text-blue-600">Serviços</a>
-                <a href="#" class="block py-2.5 px-4 text-gray-600 hover:bg-blue-100 hover:text-blue-600">Contato</a>
-            </nav>
-        </div>
-
-        <!-- Main Content -->
-        <div class="flex-1 p-10 transition-all duration-300 ease-in-out md:ml-64" id="main-content">
-            <button class="md:hidden p-4" onclick="toggleSidebar()">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </button>
-            <section class="h-screen flex items-center justify-center text-center">
-                <div>
-                    <h1 class="text-4xl md:text-6xl font-bold text-gray-800">Bem-vindo à Nossa Plataforma</h1>
-                    <p class="mt-4 text-lg text-gray-600">Explore nossos serviços e descubra como podemos ajudar você.</p>
-                    <a href="#" class="mt-6 inline-block px-8 py-3 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-500">Saiba Mais</a>
-                </div>
-            </section>
-        </div>
-    </div>
-
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('main-content');
-            sidebar.classList.toggle('-translate-x-full');
-            mainContent.classList.toggle('ml-64');
-        }
-    </script>
+<body class="bg-gray-100" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'> 
+   {%include 'sidebar.html' %}
 </body>
 </html>
