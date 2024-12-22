@@ -13,21 +13,8 @@ from django.contrib import messages
 # Create your views here.
 @login_required(login_url="/cafe/login_user/")
 def configuracao(request):
-    if request.method == 'POST':
-        nome = request.POST.get('nome')
-        senha = request.POST.get('senha')
-        if User.objects.filter(username=nome):
-            
-            return render(request, 'componente/alerta.html', {'error': 'Usuario ja existe'})
-        else:
-            user = User.objects.create_user(username=nome, password=senha)
-            user.save()
-            usuario = Usuario(nome=nome, tipo_user='admin')
-            usuario.save()
-            return render(request, 'componente/alerta.html', {'sucesso': 'Usuario cadastrado'})
-            #redirecionar para login
-    else:
-        return render(request, 'configuracao.html') 
+
+    return render(request, 'configuracao.html') 
 
 def login_user(request):
     if request.method == 'POST':
@@ -51,7 +38,31 @@ def logout_view(request):
     logout(request)
     return redirect('login')
 
+def cria_novo_usuario(request):
+    if request.method == 'POST':
+        nome = request.POST.get('nome')
+        senha = request.POST.get('senha')
+        confirma_senha = request.POST.get('confirmasenha')
+        tipo_user = request.POST.get('tipouser')
+        if User.objects.filter(username=nome):
+            
+            return render(request, 'componente/alerta.html', {'error': 'Usuario ja existe'})
+        else:
+            user = User.objects.create_user(username=nome, password=senha)
+            user.save()
+            usuario = Usuario(nome=nome, tipo_user='admin')
+            usuario.save()
+            return render(request, 'componente/alerta.html', {'sucesso': 'Usuario cadastrado'})
+
+def editar_usuario(request):
+    pass
+
+def deleta_usuario(request):
+    pass
+
+
 def trocar_senha(request):
+    
     if request.method == 'POST':
         senha_antiga = request.POST.get('senhaantiga')
         senha_nova = request.POST.get('senhanova')

@@ -39,19 +39,26 @@
             </div>
 
             <div id="usuarioModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
-                <div class="bg-white p-8 rounded-lg shadow-lg w-96">
-                    <h2 class="text-xl font-bold mb-4">Criar Usuário Novo</h2>
-                    <input type="text" placeholder="Nome de Usuário" class="w-full p-2 border rounded mb-4">
-                    <input type="email" placeholder="Email" class="w-full p-2 border rounded mb-4">
-                    <input type="password" placeholder="Senha" class="w-full p-2 border rounded mb-4">
-                    <button class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-800 transition">
-                        Criar
-                    </button>
-                    <button onclick="closeModal('usuarioModal')" class="ml-4 px-4 py-2 bg-gray-400 rounded hover:bg-gray-600 transition">
-                        Cancelar
-                    </button>
+                <form hx-post="{% url 'cria_novo_usuario' %}" hx-trigger="submit" hx-target="#mensagem-alerta" > {% csrf_token %}
+
+                    <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+                        <h2 class="text-xl font-bold mb-4">Criar Usuário Novo</h2>
+                        <input type="text" placeholder="Nome de Usuário" name="nome" class="w-full p-2 border rounded mb-4">
+                        <input type="password" placeholder="senha" name="senha" class="w-full p-2 border rounded mb-4">
+                        <input type="password" placeholder="confirma Senha" name="confirmasenha" class="w-full p-2 border rounded mb-4">
+                        <input type="text" placeholder="tipo user" name="tipouser" class="w-full p-2 border rounded mb-4">
+                        
+                        <button class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-800 transition">
+                            Criar
+                        </button>
+                        <button onclick="closeModal('usuarioModal')" class="ml-4 px-4 py-2 bg-gray-400 rounded hover:bg-gray-600 transition">
+                            Cancelar
+                        </button>
+                    </form>
                 </div>
             </div>
+
+
             <div id="senhaModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
                 <form hx-post="{% url 'trocasenha' %}" hx-trigger="submit" hx-target="#mensagem-alerta" > {% csrf_token %}
                   
