@@ -13,10 +13,64 @@ from django.contrib import messages
 # Create your views here.
 @login_required(login_url="/cafe/login_user/")
 def configuracao(request):
-    usuarios = Usuario.objects.all()
-    for u in usuarios:
-        print(f"Usuário: {u.nome}, Criado por: {u.criado_por}")
-    return render(request, 'configuracao.html') 
+    usuarios = lista_usuarios(request)
+    usuario_atual = get_object_or_404(Usuario, id=request.user.id)
+    return render(request, 'configuracao.html', {'users': usuarios , 'usuario_atual':usuario_atual.tipo_user }) 
+
+
+
+@login_required
+def editar_usuario(request, usuario_id):
+    usuario = get_object_or_404(Usuario, id=usuario_id)
+
+    if request.method == 'POST':
+        nome = request.POST.get('nome')
+        tipo_user = request.POST.get('tipo_user')
+
+        usuario.nome = nome
+        usuario.tipo_user = tipo_user
+        usuario.save()
+
+        messages.success(request, 'Usuário atualizado com sucesso!')
+        return redirect('configuracao')  # Redireciona para a tela de configuração
+    
+    return redirect('configuracao') 
+
+
+@login_required
+def excluir_usuario(request, usuario_id):
+    usuario = get_object_or_404(Usuario, id=usuario_id)
+    admin_usuario = Usuario.objects.filter(nome=request.user.username).first()  # Converte para Usuario
+
+    print(usuario.criado_por.id)  # Depuração
+    print('usuario request', admin_usuario.id)  # Depuração
+    
+    if usuario.criado_por == admin_usuario or request.user.is_superuser:
+        usuario.delete()
+        print('excluído')
+        messages.success(request, 'Usuário excluído com sucesso!')
+    else:
+        print('sem permissão')
+        messages.error(request, 'Você não tem permissão para excluir este usuário.')
+
+    return redirect('configuracao')
+
+
+@login_required(login_url="/cafe/login_user/")
+def lista_usuarios(request):
+    # Obter o Usuario correspondente ao User logado
+    admin_usuario = Usuario.objects.filter(nome=request.user.username).first()
+
+    if not admin_usuario:
+        return render(request, 'componentes/alerta.html', {
+            'error': 'Você precisa ser admin para visualizar os usuários.'
+        })
+
+    # Filtrar apenas os usuários criados por este admin
+    usuarios = Usuario.objects.filter(criado_por=admin_usuario)
+
+    return  usuarios
+
 
 def login_user(request):
     if request.method == 'POST':

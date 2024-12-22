@@ -14,21 +14,22 @@
 </head>
 <body class="bg-gray-100  flex h-screen " hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'> 
 
-
+    {%include 'componente/alerta_global.html' %}
         {% include 'sidebar.html' %}
         <div class="overflow-y-auto">
 
         
         <div  class="justify-center py-40 gap-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
-
-               <div class="bg-white rounded-lg shadow-lg hover:shadow-2xl py-20  transform hover:scale-105 transition p-5 w-full   cursor-pointer"
-                        onclick="openModal('usuarioModal')">
-                    <div class="flex flex-col items-center">
-                        <i class="fas fa-user-plus text-5xl text-green-600 mb-6"></i>
-                        <h3 class="text-xl font-bold mb-2">Criar Usuário Novo</h3>
-                        <p class="text-gray-600">Adicione novos usuários à plataforma com facilidade.</p>
-                    </div>
-                </div>
+            {% if usuario_atual == 'admin' %}
+            <div class="bg-white rounded-lg shadow-lg hover:shadow-2xl py-20  transform hover:scale-105 transition p-5 w-full   cursor-pointer"
+            onclick="openModal('usuarioModal')">
+            <div class="flex flex-col items-center">
+                <i class="fas fa-user-plus text-5xl text-green-600 mb-6"></i>
+                <h3 class="text-xl font-bold mb-2">Criar Usuário Novo</h3>
+                <p class="text-gray-600">Adicione novos usuários à plataforma com facilidade.</p>
+            </div>
+        </div>
+        {%endif%}
 
                 
                 <div class="bg-white rounded-lg shadow-lg hover:shadow-2xl py-20 transform hover:scale-105 transition p-5  w-full cursor-pointer"
@@ -49,7 +50,8 @@
                     </div>
                 </div>
             </div>
-
+            {% if usuario_atual == 'admin' %}
+            
             <div id="usuarioModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
                 <form hx-post="{% url 'cria_novo_usuario' %}" hx-trigger="submit" hx-target="#mensagem-alerta" > {% csrf_token %}
 
@@ -82,7 +84,7 @@
                     </form>
                 </div>
             </div>
-
+            {%endif%}
 
             <div id="senhaModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
                 <form hx-post="{% url 'trocasenha' %}" hx-trigger="submit" hx-target="#mensagem-alerta" > {% csrf_token %}
@@ -124,6 +126,7 @@
                         {% include 'componente/alerta.html' %}
                     </div>
                     
+                    
                         <input type="text" placeholder="Novo nome" name="novoNome" class="w-full p-2 border rounded mb-4">
                         <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-800 transition">
                             Salvar
@@ -136,6 +139,8 @@
             </div>
 
         </div>
+     
+        {% include 'componente/lista_users.html' %}
         </div>
     <script>
         function openModal(modalId) {
