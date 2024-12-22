@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
 
 
 # Create your views here.
@@ -34,16 +36,37 @@ def login_user(request):
         user = authenticate(username=nome, password=senha)
         if user:
             login_django(request, user)
+
             return redirect('home')
+        else:
+            return render(request, 'login.html', {'error': 'Senha ou nome incorretos.'})
     else:
         return render(request, 'login.html')
 
 @login_required(login_url="/cafe/login_user/")
 def home_page(request):
-    
     return render(request, 'home.html')
     
 def logout_view(request):
     logout(request)
     return redirect('login')
 
+def trocar_senha(request):
+    if request.method == 'POST':
+        senha_antiga = request.POST.get('senhaantiga')
+        senha_nova = request.POST.get('senhanova')
+        senha_confirmacao = request.POST.get('senhaconfirmacao')
+
+        user =  request.user
+        if not user.check_password(senha_antiga):
+            print('oi3')
+            return render(request, 'componente/alerta.html', {'error': ' Senha antiga incorreta'})
+        if senha_nova != senha_confirmacao:
+            print('oiu')
+            return render(request, 'componente/alerta.html', {'error': 'As senhas não coincidem'})
+        print('oi')
+        user.set_password(senha_nova)
+        user.save()
+        update_session_auth_hash(request, user)
+        return render(request, 'componente/alerta.html', {'sucesso': 'Senha atualizada'})
+    return render(request, 'configuracao.html')
