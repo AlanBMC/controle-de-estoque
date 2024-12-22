@@ -64,8 +64,24 @@ def cria_novo_usuario(request):
             usuario.save()
             return render(request, 'componente/alerta.html', {'sucesso': 'Usuario cadastrado'})
 
-def editar_usuario(request):
-    pass
+def editar_nome_usuario(request):
+    
+    usuario = get_object_or_404(Usuario, nome=request.user.username) 
+    if request.method == 'POST':
+        novo_nome =  request.POST.get('novoNome')
+        if  User.objects.filter(username=novo_nome).exclude(id=request.user.id).exists():
+            print('entrou aqui quando deu erro')
+            return render(request, 'componente/alerta.html', {'error': 'Nome ja existe'})
+        else:
+            user = request.user
+            user.username = novo_nome
+            user.save()
+            usuario.nome = novo_nome
+            usuario.save()
+            print('entrou aqui foi deu 200')
+            return render(request, 'componente/alerta.html', {'sucesso': 'Nome editado com sucesso'})
+
+
 
 
 def deleta_usuario(request):

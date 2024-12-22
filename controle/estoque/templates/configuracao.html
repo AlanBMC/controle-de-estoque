@@ -39,6 +39,15 @@
                         <p class="text-gray-600">Atualize sua senha de forma rápida e segura.</p>
                     </div>
                 </div>
+
+                 <div class="bg-white rounded-lg shadow-lg hover:shadow-2xl py-20 transform hover:scale-105 transition p-5  w-full cursor-pointer"
+                        onclick="openModal('editanome')">
+                    <div class="flex flex-col items-center">
+                        <i class="fas fa-lock text-5xl text-blue-600 mb-6"></i>
+                        <h3 class="text-xl font-bold mb-2">Mudar nome</h3>
+                        <p class="text-gray-600">Atualize o nome</p>
+                    </div>
+                </div>
             </div>
 
             <div id="usuarioModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
@@ -102,6 +111,30 @@
                 </form>
             </div>
     
+            <div id="editanome" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+                <form hx-post="{% url 'editar_nome_usuario' %}" hx-trigger="submit" hx-target="#mensagem-alertas" > {% csrf_token %}
+                
+                    <div class="bg-white p-8 rounded-lg shadow-lg w-96 relative">
+                            <button type="button" onclick="closeModal('editanome')" 
+                                    class="absolute top-4 right-4 text-gray-600 hover:text-red-600">
+                                ✖
+                            </button>
+                    <h2 class="text-xl font-bold mb-4">Mudar nome</h2>
+                    <div id="mensagem-alertas" class="mt-4">
+                        {% include 'componente/alerta.html' %}
+                    </div>
+                    
+                        <input type="text" placeholder="Novo nome" name="novoNome" class="w-full p-2 border rounded mb-4">
+                        <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-800 transition">
+                            Salvar
+                        </button>
+                        <button onclick="closeModal('editanome')" class="ml-4 px-4 py-2 bg-gray-400 rounded hover:bg-gray-600 transition">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+
         </div>
         </div>
     <script>
