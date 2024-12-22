@@ -12,14 +12,16 @@
     <script src="https://unpkg.com/htmx.org@1.8.5"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 " hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'> 
+<body class="bg-gray-100  flex h-screen " hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'> 
 
-    <div class="flex h-screen">
 
         {% include 'sidebar.html' %}
-        <div  class="justify-center py-10 gap-12 grid grid-cols-1 ">
+        <div class="overflow-y-auto">
 
-               <div class="bg-white rounded-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition p-8 w-72 md:w-80 cursor-pointer"
+        
+        <div  class="justify-center py-40 gap-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
+
+               <div class="bg-white rounded-lg shadow-lg hover:shadow-2xl py-20  transform hover:scale-105 transition p-5 w-full   cursor-pointer"
                         onclick="openModal('usuarioModal')">
                     <div class="flex flex-col items-center">
                         <i class="fas fa-user-plus text-5xl text-green-600 mb-6"></i>
@@ -28,7 +30,8 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition p-8 w-72 md:w-80 cursor-pointer"
+                
+                <div class="bg-white rounded-lg shadow-lg hover:shadow-2xl py-20 transform hover:scale-105 transition p-5  w-full cursor-pointer"
                         onclick="openModal('senhaModal')">
                     <div class="flex flex-col items-center">
                         <i class="fas fa-lock text-5xl text-blue-600 mb-6"></i>
@@ -41,14 +44,27 @@
             <div id="usuarioModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
                 <form hx-post="{% url 'cria_novo_usuario' %}" hx-trigger="submit" hx-target="#mensagem-alerta" > {% csrf_token %}
 
-                    <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+                    <div class="bg-white p-8 rounded-lg shadow-lg w-96 relative">
+            
+                        <!-- Botão para fechar o modal (X) -->
+                        <button type="button" onclick="closeModal('usuarioModal')" 
+                                class="absolute top-4 right-4 text-gray-600 hover:text-red-600">
+                            ✖
+                        </button>
+                        <div id="mensagem-alerta" class="mt-4">
+                            {% include 'componente/alerta.html' %}
+                        </div>
                         <h2 class="text-xl font-bold mb-4">Criar Usuário Novo</h2>
-                        <input type="text" placeholder="Nome de Usuário" name="nome" class="w-full p-2 border rounded mb-4">
-                        <input type="password" placeholder="senha" name="senha" class="w-full p-2 border rounded mb-4">
-                        <input type="password" placeholder="confirma Senha" name="confirmasenha" class="w-full p-2 border rounded mb-4">
-                        <input type="text" placeholder="tipo user" name="tipouser" class="w-full p-2 border rounded mb-4">
-                        
-                        <button class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-800 transition">
+                        <input type="text" placeholder="Nome de Usuário" name="nome" class="w-full p-2 border rounded mb-4" required>
+                        <input type="password" placeholder="senha" name="senha" class="w-full p-2 border rounded mb-4" required>
+                        <input type="password" placeholder="confirma Senha" name="confirmasenha" class="w-full p-2 border rounded mb-4" required>
+                        <select name="tipouser" class="w-full p-2 border rounded mb-4">
+                            <option value="" disabled selected>Selecione o tipo de usuário</option>
+                            <option value="admin">Admin</option>
+                            <option value="funcionario">Funcionário</option>
+                        </select required>
+                                                
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-800 transition">
                             Criar
                         </button>
                         <button onclick="closeModal('usuarioModal')" class="ml-4 px-4 py-2 bg-gray-400 rounded hover:bg-gray-600 transition">
@@ -64,7 +80,11 @@
                   
                     
                     
-                <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+                    <div class="bg-white p-8 rounded-lg shadow-lg w-96 relative">
+                            <button type="button" onclick="closeModal('senhaModal')" 
+                                    class="absolute top-4 right-4 text-gray-600 hover:text-red-600">
+                                ✖
+                            </button>
                     <h2 class="text-xl font-bold mb-4">Mudar Senha</h2>
                     <div id="mensagem-alerta" class="mt-4">
                         {% include 'componente/alerta.html' %}
@@ -80,8 +100,10 @@
                         </button>
                     </div>
                 </form>
+            </div>
+    
         </div>
-
+        </div>
     <script>
         function openModal(modalId) {
             document.getElementById(modalId).classList.remove('hidden');

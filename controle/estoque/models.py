@@ -17,11 +17,26 @@ class Usuario(models.Model):
     
     nome = models.CharField(max_length=100)
     tipo_user = models.CharField(max_length=20, choices=TIPOS_USUARIO)
+    criado_por = models.ForeignKey(
+        'self',  # Relacionamento com o próprio modelo Usuario
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={'tipo_user': 'admin'},  # Apenas admins podem ser criadores
+        related_name='funcionarios_criados'  # Para facilitar queries reversas
+    )
 
     def __str__(self):
-        return self.nome
-
+        return f"{self.nome} ({self.tipo_user})"
     
+    def is_editable_by(self, usuario):
+        """
+        Permite a edição apenas se o usuário for admin e tiver criado o funcionário.
+        """
+        return usuario.tipo_user == 'admin' and (usuario == self.criado_por or self.tipo_user == 'admin')
+
+
+
 
 class Fornecedor(models.Model):
     nome = models.CharField(max_length=100)

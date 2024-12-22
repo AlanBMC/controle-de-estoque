@@ -1,24 +1,7 @@
+{% extends 'base.html' %}
 {% load static %}
+{% block content %}
+<p>ola mundo</p>
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
-    <link rel="stylesheet" href="{%static 'css/home.css' %}">
- 
-    <script src="https://unpkg.com/htmx.org@1.8.5"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
-   
-</head>
-<body class="bg-gray-100" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'> 
-    <div class="flex h-screen">
-
-        {%include 'sidebar.html' %}
-        <p>Ola mundo</p>
-    </div>
-</body>
-</html>
+{%endblock%}

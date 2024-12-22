@@ -13,7 +13,9 @@ from django.contrib import messages
 # Create your views here.
 @login_required(login_url="/cafe/login_user/")
 def configuracao(request):
-
+    usuarios = Usuario.objects.all()
+    for u in usuarios:
+        print(f"Usuário: {u.nome}, Criado por: {u.criado_por}")
     return render(request, 'configuracao.html') 
 
 def login_user(request):
@@ -28,6 +30,7 @@ def login_user(request):
         else:
             return render(request, 'login.html', {'error': 'Senha ou nome incorretos.'})
     else:
+       
         return render(request, 'login.html')
 
 @login_required(login_url="/cafe/login_user/")
@@ -38,29 +41,37 @@ def logout_view(request):
     logout(request)
     return redirect('login')
 
+@login_required(login_url="/cafe/login_user/")
 def cria_novo_usuario(request):
     if request.method == 'POST':
         nome = request.POST.get('nome')
         senha = request.POST.get('senha')
         confirma_senha = request.POST.get('confirmasenha')
         tipo_user = request.POST.get('tipouser')
+        admin_usuario = Usuario.objects.filter(nome=request.user.username, tipo_user='admin').first()
+        print(admin_usuario)
+        if not admin_usuario:
+            return render(request, 'componente/alerta.html', {'error': 'Voce precisa ser admin.'})
+        if senha != confirma_senha:
+            return render(request, 'componente/alerta.html', {'error': 'Senhas não coincidem.'})
+        
         if User.objects.filter(username=nome):
-            
             return render(request, 'componente/alerta.html', {'error': 'Usuario ja existe'})
         else:
             user = User.objects.create_user(username=nome, password=senha)
             user.save()
-            usuario = Usuario(nome=nome, tipo_user='admin')
+            usuario = Usuario(nome=nome, tipo_user=tipo_user, criado_por=admin_usuario )
             usuario.save()
             return render(request, 'componente/alerta.html', {'sucesso': 'Usuario cadastrado'})
 
 def editar_usuario(request):
     pass
 
+
 def deleta_usuario(request):
     pass
 
-
+@login_required(login_url="/cafe/login_user/")
 def trocar_senha(request):
     
     if request.method == 'POST':
