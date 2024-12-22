@@ -10,7 +10,7 @@ from django.http import JsonResponse
 
 # Create your views here.
 @login_required(login_url="/cafe/login_user/")
-def cadastro_usuario(request):
+def configuracao(request):
     if request.method == 'POST':
         nome = request.POST.get('nome')
         senha = request.POST.get('senha')

@@ -10,9 +10,15 @@
  
     <script src="https://unpkg.com/htmx.org@1.8.5"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
    
 </head>
 <body class="bg-gray-100" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'> 
-   {%include 'sidebar.html' %}
+    <div class="flex h-screen">
+
+        {%include 'sidebar.html' %}
+        <p>Ola mundo</p>
+    </div>
 </body>
 </html>
