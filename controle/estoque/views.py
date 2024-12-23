@@ -17,7 +17,9 @@ def configuracao(request):
     usuario_atual = get_object_or_404(Usuario, id=request.user.id)
     return render(request, 'configuracao.html', {'users': usuarios , 'usuario_atual':usuario_atual.tipo_user }) 
 
-
+def view_produto(request):
+    if request.method == 'GET':
+        return render(request, 'produto.html')
 
 @login_required
 def editar_usuario(request, usuario_id):
