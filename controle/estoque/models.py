@@ -1,12 +1,5 @@
 from django.db import models
 
-class Produto(models.Model):
-    nome = models.CharField(max_length=100)
-    quantidade = models.PositiveIntegerField()
-    vencimento = models.DateField()
-
-    def __str__(self):
-        return self.nome
 
    
 class Usuario(models.Model):
@@ -36,7 +29,19 @@ class Usuario(models.Model):
         return usuario.tipo_user == 'admin' and (usuario == self.criado_por or self.tipo_user == 'admin')
 
 
+class Produto(models.Model):
+    nome = models.CharField(max_length=100)
+    quantidade = models.PositiveIntegerField()
+    vencimento = models.DateField()
+    admin_responsavel = models.ForeignKey(
+        Usuario,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
 
+    def __str__(self):
+        return self.nome
 
 class Fornecedor(models.Model):
     nome = models.CharField(max_length=100)
