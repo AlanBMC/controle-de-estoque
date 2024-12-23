@@ -19,7 +19,8 @@ def configuracao(request):
 
 def view_produto(request):
     if request.method == 'GET':
-        return render(request, 'produto.html')
+        all_fornecedores = Fornecedor.objects.all()
+        return render(request, 'produto.html', {'fornecedores': all_fornecedores})
 
 def cria_produto(request):
     if request.method == 'POST': 
@@ -29,7 +30,18 @@ def cria_produto(request):
         id_fornecedor = request.POST.get('id_fornecedor')
         if id_fornecedor:
             _, admin_atual = usuario_atual(request)
-
+            fornecedor = Fornecedor.objects.get(id=id_fornecedor)
+            produto = Produto(
+            nome=nome,
+            quantidade=quantidade,
+            vencimento=vencimento,
+            admin_responsavel=admin_atual,
+            fornecedor=fornecedor
+        )
+            produto.save()
+            messages.success(request, 'Produto cadastrado com sucesso!')
+            return redirect('view_produto')
+        
 
 def cria_fornecedor(request):
     if request.method == 'POST': 
@@ -47,6 +59,8 @@ def cria_fornecedor(request):
             messages.info(request, f'Fornecedor {fornecedor.nome} Ja existe')
         
         return redirect('view_produto')
+    
+
         #retorna mensagem de criado.
 def usuario_atual(request):
     '''

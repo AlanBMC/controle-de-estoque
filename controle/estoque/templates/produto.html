@@ -36,15 +36,88 @@
                        class="mt-1 block w-full p-2 border rounded-md">
             </div>
             
+            <div class="mb-4 relative">
+                <label for="fornecedor" class="block text-sm font-medium text-gray-700">Fornecedor</label>
+                <div class="flex space-x-2">
+                    <select id="fornecedor" name="fornecedor" required 
+                            class="mt-1 block w-full p-2 border rounded-md">
+                        <option value="" disabled selected>Selecione um fornecedor</option>
+                        {% for fornecedor in fornecedores %}
+                            <option value="{{ fornecedor.id }}">{{ fornecedor.nome }}</option>
+                        {% endfor %}
+                    </select>
+                    
+                    <!-- Botão para adicionar novo fornecedor -->
+                    <button type="button" onclick="openModal('novoFornecedorModal')" 
+                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800 transition">
+                        +
+                    </button>
+                </div>
+            </div>
+        
             <div class="flex justify-center">
                 <button type="submit" 
                         class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-800 transition">
                     Cadastrar
                 </button>
             </div>
+            
         </form>
     </div>
 
 </div>
+
+<div id="novoFornecedorModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+    <form method="POST" action="{% url 'cria_fornecedor'%}">
+        {% csrf_token %}
+        <div class="bg-white p-8 rounded-lg shadow-lg w-96 relative">
+            
+            <!-- Botão Fechar Modal -->
+            <button type="button" onclick="closeModal('novoFornecedorModal')" 
+                    class="absolute top-4 right-4 text-gray-600 hover:text-red-600">
+                ✖
+            </button>
+
+            <h2 class="text-xl font-bold mb-4">Novo Fornecedor</h2>
+
+            <div class="mb-4">
+                <label for="nome_fornecedor" class="block text-sm font-medium text-gray-700">Nome</label>
+                <input type="text" id="nome_fornecedor" name="nome" required 
+                       class="mt-1 block w-full p-2 border rounded-md" required>
+            </div>
+
+            
+        
+
+            <div class="mb-4">
+                <label for="telefone" class="block text-sm font-medium text-gray-700">Telefone</label>
+                <input type="text" id="telefone" name="telefone" 
+                       class="mt-1 block w-full p-2 border rounded-md">
+            </div>
+
+            <div class="mb-4">
+                <label for="email" class="block text-sm font-medium text-gray-700" >Email</label>
+                <input type="email" id="email" name="email" 
+                       class="mt-1 block w-full p-2 border rounded-md" required>
+            </div>
+
+            <div class="flex justify-center">
+                <button type="submit" 
+                        class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-800 transition">
+                    Cadastrar Fornecedor
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    function openModal(modalId) {
+        document.getElementById(modalId).classList.remove('hidden');
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+    }
+</script>
 
 {%endblock%}

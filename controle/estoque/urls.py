@@ -11,7 +11,7 @@ urlpatterns = [
     path('editar_nome_usuario/' , views.editar_nome_usuario, name='editar_nome_usuario'),
     path('excluir_usuario/<int:usuario_id>/', views.excluir_usuario, name='excluir_usuario'),
     path('editar_usuario/<int:usuario_id>/', views.editar_usuario, name='editar_usuario'),
-    path('view_produto/', views.view_produto, name='view_produto')
-
+    path('view_produto/', views.view_produto, name='view_produto'),
+    path('cria_fornecedor/', views.cria_fornecedor, name='cria_fornecedor'),
 
 ]
