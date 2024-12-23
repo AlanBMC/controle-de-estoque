@@ -36,11 +36,15 @@ def cria_fornecedor(request):
         nome = request.POST.get('nome')
         telefone = request.POST.get('telefone')
         email = request.POST.get('email')
-        fornecedor, criado = Fornecedor.objects.get_or_create(nome=nome, telefone=telefone, email=email)
+        fornecedor, criado = Fornecedor.objects.get_or_create(nome=nome,   
+                                                              defaults={
+                                                        'telefone': telefone,
+                                                        'email': email
+                                                    })
         if criado:
             messages.success(request, f'Fornecedor {fornecedor.nome} criado com sucesso')
         else:
-            messages.success(request, f'Fornecedor {fornecedor.nome} Ja existe')
+            messages.info(request, f'Fornecedor {fornecedor.nome} Ja existe')
         
         return redirect('view_produto')
         #retorna mensagem de criado.
