@@ -33,12 +33,13 @@ class Usuario(models.Model):
 
 class Fornecedor(models.Model):
     nome = models.CharField(max_length=100)
-    cnpj = models.CharField(max_length=18, unique=True)
     telefone = models.CharField(max_length=15, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
 
     def __str__(self):
         return self.nome
+
+
 
 class Produto(models.Model):
     nome = models.CharField(max_length=100)

@@ -26,11 +26,24 @@ def cria_produto(request):
         nome = request.POST.get('nome')
         quantidade = request.POST.get('quantidade')
         vencimento = request.POST.get('vencimento')
-        fornecedor_id = request.POST.get('fornecedor')
+        id_fornecedor = request.POST.get('id_fornecedor')
+        if id_fornecedor:
+            _, admin_atual = usuario_atual(request)
 
 
-        _, admin_atual = usuario_atual(request)
-
+def cria_fornecedor(request):
+    if request.method == 'POST': 
+        nome = request.POST.get('nome')
+        telefone = request.POST.get('telefone')
+        email = request.POST.get('email')
+        fornecedor, criado = Fornecedor.objects.get_or_create(nome=nome, telefone=telefone, email=email)
+        if criado:
+            messages.success(request, f'Fornecedor {fornecedor.nome} criado com sucesso')
+        else:
+            messages.success(request, f'Fornecedor {fornecedor.nome} Ja existe')
+        
+        return redirect('view_produto')
+        #retorna mensagem de criado.
 def usuario_atual(request):
     '''
     Funcionalidade: retorna usuario-adm / evitar linhas de codigos
@@ -161,8 +174,7 @@ def editar_nome_usuario(request):
 
 
 
-def deleta_usuario(request):
-    pass
+
 
 @login_required(login_url="/cafe/login_user/")
 def trocar_senha(request):
