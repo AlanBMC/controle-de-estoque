@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import logout
 from django.contrib.auth import login as login_django
-from .models import Usuario
+from .models import Usuario, Produto, Fornecedor, MovimentoEstoque
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -20,6 +20,27 @@ def configuracao(request):
 def view_produto(request):
     if request.method == 'GET':
         return render(request, 'produto.html')
+
+def cria_produto(request):
+    if request.method == 'POST': 
+        nome = request.POST.get('nome')
+        quantidade = request.POST.get('quantidade')
+        vencimento = request.POST.get('vencimento')
+        fornecedor_id = request.POST.get('fornecedor')
+
+
+        _, admin_atual = usuario_atual(request)
+
+def usuario_atual(request):
+    '''
+    Funcionalidade: retorna usuario-adm / evitar linhas de codigos
+    Parametro: request
+    Retorna uma tupla: usuario_atual, admin_responsavel
+    '''
+    usuario_atual = Usuario.objects.filter(nome=request.user.username).first()
+    admin_responsavel = usuario_atual.criado_por if usuario_atual.criado_por else usuario_atual
+    return usuario_atual, admin_responsavel
+
 
 @login_required
 def editar_usuario(request, usuario_id):
