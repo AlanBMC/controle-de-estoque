@@ -8,7 +8,8 @@ from django.contrib.auth import authenticate
 from django.http import JsonResponse
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
-
+import xml.etree.ElementTree as ET
+import csv
 
 # Create your views here.
 @login_required(login_url="/cafe/login_user/")
@@ -29,6 +30,7 @@ def cria_produto(request):
         quantidade = request.POST.get('quantidade')
         vencimento = request.POST.get('vencimento')
         id_fornecedor = request.POST.get('id_fornecedor')
+        ean = request.POST.get('ean')
         if id_fornecedor:
             _, admin_atual = usuario_atual(request)
             fornecedor = Fornecedor.objects.get(id=id_fornecedor)
@@ -37,13 +39,13 @@ def cria_produto(request):
             quantidade=quantidade,
             vencimento=vencimento,
             admin_responsavel=admin_atual,
-            fornecedor=fornecedor
+            fornecedor=fornecedor,
+            codigo_de_barras = ean
         )
             produto.save()
             messages.success(request, 'Produto cadastrado com sucesso!')
             return redirect('view_produto')
         
-
 def edita_produto(request):
     
     if request.method == 'POST':
@@ -70,6 +72,25 @@ def deleta_produto(request):
         produto.delete()
         messages.success(request, f'Produto ( {nome_produto} ) deletado com sucesso')
         return redirect('view_produto')
+
+def cadastra_produtoXml(request):
+    if request.method == 'POST':
+        arquivo = request.FILES.get('arquivoxml')
+        namespace = {'nfe': 'http://www.portalfiscal.inf.br/nfe'}
+
+        tree = ET.parse(arquivo)
+        raiz = tree.getroot()
+        print(raiz)
+        for produto in raiz.findall('.//nfe:prod', namespace):
+            print(produto.find('nfe:xProd', namespace).text)
+            print(produto.find('nfe:cEAN', namespace).text[1:14])
+            quantidade = produto.find('nfe:qCom', namespace).text
+            if quantidade:
+                    quantidade = int(float(quantidade))
+                    print(quantidade)
+        messages.success(request, 'Cadastrados')
+        return redirect('view_produto')
+    
     
 def cria_fornecedor(request):
     if request.method == 'POST': 
@@ -90,6 +111,7 @@ def cria_fornecedor(request):
     
 
         #retorna mensagem de criado.
+
 def usuario_atual(request):
     '''
     Funcionalidade: retorna usuario-adm / evitar linhas de codigos
@@ -99,7 +121,6 @@ def usuario_atual(request):
     usuario_atual = Usuario.objects.filter(nome=request.user.username).first()
     admin_responsavel = usuario_atual.criado_por if usuario_atual.criado_por else usuario_atual
     return usuario_atual, admin_responsavel
-
 
 @login_required
 def editar_usuario(request, usuario_id):
@@ -117,7 +138,6 @@ def editar_usuario(request, usuario_id):
         return redirect('configuracao')  # Redireciona para a tela de configuração
     
     return redirect('configuracao') 
-
 
 @login_required
 def excluir_usuario(request, usuario_id):
@@ -137,7 +157,6 @@ def excluir_usuario(request, usuario_id):
 
     return redirect('configuracao')
 
-
 @login_required(login_url="/cafe/login_user/")
 def lista_usuarios(request):
     # Obter o Usuario correspondente ao User logado
@@ -152,7 +171,6 @@ def lista_usuarios(request):
     usuarios = Usuario.objects.filter(criado_por=admin_usuario)
 
     return  usuarios
-
 
 def login_user(request):
     if request.method == 'POST':
@@ -216,11 +234,6 @@ def editar_nome_usuario(request):
             usuario.save()
             print('entrou aqui foi deu 200')
             return render(request, 'componente/alerta.html', {'sucesso': 'Nome editado com sucesso'})
-
-
-
-
-
 
 @login_required(login_url="/cafe/login_user/")
 def trocar_senha(request):

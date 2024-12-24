@@ -16,5 +16,5 @@ urlpatterns = [
     path('cria_produto/', views.cria_produto, name='cria_produto'),
     path('edita_produto/', views.edita_produto, name='edita_produto'),
     path('deleta_produto/', views.deleta_produto, name='deleta_produto'),
-
+    path('cadastra_produtoXml/', views.cadastra_produtoXml, name='cadastra_produtoXml'),
 ]
