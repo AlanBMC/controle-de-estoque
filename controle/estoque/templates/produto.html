@@ -1,74 +1,23 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block content %}
 
+{% block content %}
 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl p-6">
         {% include 'componente/alerta_global.html'%}
     <!-- Card de Produtos -->
     <div class="bg-white shadow-md rounded-lg p-6 h-96 overflow-y-auto">
         <h2 class="text-xl font-bold mb-4">Produtos Cadastrados</h2>
         <ul class="space-y-4">
-           {% include 'componente/lista_produtos.html' %}
+           {% include 'componente/lista_produtos_crud.html' %}
            
         </ul>
     </div>
 
     <!-- Formulário de Cadastro -->
-    <div class="bg-white shadow-lg rounded-lg p-8 col-span-2">
-        <h2 class="text-2xl font-bold mb-6 text-center">Cadastrar Novo Produto</h2>
-        <form method="POST" action="{% url 'cria_produto' %}" >
-            {% csrf_token %}
-            <div class="mb-4">
-                <label for="nome" class="block text-sm font-medium text-gray-700">Nome do Produto</label>
-                <input type="text" id="nome" name="nome" required 
-                       class="mt-1 block w-full p-2 border rounded-md">
-            </div>
-            
-            <div class="mb-4">
-                <label for="quantidade" class="block text-sm font-medium text-gray-700">Quantidade</label>
-                <input type="number" id="quantidade" name="quantidade" required 
-                       class="mt-1 block w-full p-2 border rounded-md">
-            </div>
-            
-            <div class="mb-4">
-                <label for="vencimento" class="block text-sm font-medium text-gray-700">Data de Vencimento</label>
-                <input type="date" id="vencimento" name="vencimento" required 
-                       class="mt-1 block w-full p-2 border rounded-md">
-            </div>
-            
-            <div class="mb-4 relative">
-                <label for="fornecedor" class="block text-sm font-medium text-gray-700">Fornecedor</label>
-                <div class="flex space-x-2">
-                    <select id="fornecedor" name="id_fornecedor" required 
-                            class="mt-1 block w-full p-2 border rounded-md">
-                        <option value="" disabled selected>Selecione um fornecedor</option>
-                        {% for fornecedor in fornecedores %}
-                            <option value="{{ fornecedor.id }}">{{ fornecedor.nome }}</option>
-                        {% endfor %}
-                    </select>
-                    
-                    <!-- Botão para adicionar novo fornecedor -->
-                    <button type="button" onclick="openModal('novoFornecedorModal')" 
-                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800 transition">
-                        +
-                    </button>
-                </div>
-            </div>
-        
-            <div class="flex justify-center">
-                <button type="submit" 
-                        class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-800 transition">
-                    Cadastrar
-                </button>
-            </div>
-            
-        </form>
-    </div>
-
+  {% include 'componente/cadastro_produto.html' %}
 </div>
 
 {% include 'componente/modal_cria_fornecedor.html' %}
-
 <script>
     function openModal(modalId) {
         document.getElementById(modalId).classList.remove('hidden');
@@ -77,6 +26,8 @@
     function closeModal(modalId) {
         document.getElementById(modalId).classList.add('hidden');
     }
+    
+
 </script>
 
 {%endblock%}

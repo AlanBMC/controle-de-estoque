@@ -44,6 +44,33 @@ def cria_produto(request):
             return redirect('view_produto')
         
 
+def edita_produto(request):
+    
+    if request.method == 'POST':
+
+        id_produto = request.POST.get('produto_id')
+        nome = request.POST.get('nome')
+        quantidade = request.POST.get('quantidade')
+        vencimento = request.POST.get('vencimento')
+        id_fornecedor = request.POST.get('id_fornecedor')
+        produto = Produto.objects.filter(id=id_produto).first()
+        produto.nome = nome
+        produto.quantidade = quantidade
+        produto.vencimento = vencimento
+        produto.fornecedor_id = id_fornecedor
+        produto.save()
+        messages.success(request, 'Produto atualizado com sucesso')
+        return redirect('view_produto')
+    
+def deleta_produto(request):
+    if request.method == 'POST':
+        id_produto = request.POST.get('produto_id')
+        produto = Produto.objects.filter(id=id_produto).first()
+        nome_produto = produto.nome
+        produto.delete()
+        messages.success(request, f'Produto ( {nome_produto} ) deletado com sucesso')
+        return redirect('view_produto')
+    
 def cria_fornecedor(request):
     if request.method == 'POST': 
         nome = request.POST.get('nome')

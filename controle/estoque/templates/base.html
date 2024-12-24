@@ -14,13 +14,17 @@
 
    
 </head>
-<body class="bg-gray-100  flex h-screen " hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'> 
+<body class="bg-gray-100  flex h-screen" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'> 
+
+
 
     {%include 'sidebar.html' %}
     <div class="overflow-y-auto">
-        {% block content %}
-        {%endblock%}
+            <!-- Conteúdo aqui -->
+            {% block content %}
+            {%endblock%}
     </div>
+
    
 </body>
 </html>
