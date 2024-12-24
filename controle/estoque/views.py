@@ -20,7 +20,8 @@ def configuracao(request):
 def view_produto(request):
     if request.method == 'GET':
         all_fornecedores = Fornecedor.objects.all()
-        return render(request, 'produto.html', {'fornecedores': all_fornecedores})
+        all_produtos = Produto.objects.all()
+        return render(request, 'produto.html', {'fornecedores': all_fornecedores, 'produtos': all_produtos})
 
 def cria_produto(request):
     if request.method == 'POST': 
