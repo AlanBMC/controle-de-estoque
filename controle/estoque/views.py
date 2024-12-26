@@ -19,9 +19,16 @@ def configuracao(request):
     return render(request, 'configuracao.html', {'users': usuarios , 'usuario_atual':usuario_atual.tipo_user }) 
 
 def view_produto(request):
+    '''
+    funcao: busca usuario logado, usuario que criou o logado, busca produtos criado por algum dos dois. Busca
+    todos os fornecedores cadastrados.
+    '''
     if request.method == 'GET':
         all_fornecedores = Fornecedor.objects.all()
-        all_produtos = Produto.objects.all()
+        usuario_atual = Usuario.objects.get(id=request.user.id)
+        all_produtos = Produto.objects.filter(
+            admin_responsavel__in=[usuario_atual, usuario_atual.criado_por]
+        )
         return render(request, 'produto.html', {'fornecedores': all_fornecedores, 'produtos': all_produtos})
 
 def cria_produto(request):
@@ -73,9 +80,12 @@ def deleta_produto(request):
         messages.success(request, f'Produto ( {nome_produto} ) deletado com sucesso')
         return redirect('view_produto')
 
-def cards_produto(request):
-    return render(request, 'view_produtos.html')
+def movimento_estoque(request):
+    return render(request, 'movimento_estoque.html')
+
+def dados_produtos(request):
     
+    pass
 
 def cadastra_produtoXml(request):
     if request.method == 'POST':

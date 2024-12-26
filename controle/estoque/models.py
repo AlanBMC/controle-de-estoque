@@ -44,7 +44,7 @@ class Fornecedor(models.Model):
 class Produto(models.Model):
     nome = models.CharField(max_length=100)
     quantidade = models.PositiveIntegerField()
-    codigo_de_barras = models.IntegerField(max_length=13, default=1234)
+    codigo_de_barras = models.IntegerField(default=1234)
     vencimento = models.DateField()
     admin_responsavel = models.ForeignKey(
         Usuario,
