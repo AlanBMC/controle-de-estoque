@@ -1,157 +1,73 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configuracao</title>
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
- 
-    <script src="https://unpkg.com/htmx.org@1.8.5"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100  flex h-screen " hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'> 
 
-    {%include 'componente/alerta_global.html' %}
-   
+{% block content %}
+{%include 'componente/alerta_global.html' %}
 
-    
-        {% include 'sidebar.html' %}
-        <div class="overflow-y-auto">
-
+<div class="fixed top-4 right-6 z-50">
+    <button onclick="openModal('listaUsuariosModal')" 
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-800 transition">
+        <i class="fas fa-users mr-2"></i> Ver Usuários
+    </button>
+</div>
         
-        <div  class="justify-center py-40 gap-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
-            {% if usuario_atual == 'admin' %}
+    <div  class="justify-center py-40 gap-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto ml-6 mr-6" >
+        {% if usuario_atual == 'admin' %}
             <div class="bg-white rounded-lg shadow-lg hover:shadow-2xl py-20  transform hover:scale-105 transition p-5 w-full   cursor-pointer"
-            onclick="openModal('usuarioModal')">
-            <div class="flex flex-col items-center">
-                <i class="fas fa-user-plus text-5xl text-green-600 mb-6"></i>
-                <h3 class="text-xl font-bold mb-2">Criar Usuário Novo</h3>
-                <p class="text-gray-600">Adicione novos usuários à plataforma com facilidade.</p>
+                    onclick="openModal('usuarioModal')">
+                <div class="flex flex-col items-center">
+                    <i class="fas fa-user-plus text-5xl text-green-600 mb-6"></i>
+                    <h3 class="text-xl font-bold mb-2">Criar Usuário Novo</h3>
+                    <p class="text-gray-600">Adicione novos usuários à plataforma com facilidade.</p>
+                </div>
             </div>
-        </div>
         {%endif%}
+            
+            <div class="bg-white rounded-lg shadow-lg hover:shadow-2xl py-20 transform hover:scale-105 transition p-5  w-full cursor-pointer"
+                    onclick="openModal('senhaModal')">
+                <div class="flex flex-col items-center">
+                    <i class="fas fa-lock text-5xl text-blue-600 mb-6"></i>
+                    <h3 class="text-xl font-bold mb-2">Mudar Senha</h3>
+                    <p class="text-gray-600">Atualize sua senha de forma rápida e segura.</p>
+                </div>
+            </div>
 
+             <div class="bg-white rounded-lg shadow-lg hover:shadow-2xl py-20 transform hover:scale-105 transition p-5  w-full cursor-pointer"
+                    onclick="openModal('editanome')">
+                <div class="flex flex-col items-center">
+                    <i class="fas fa-lock text-5xl text-blue-600 mb-6"></i>
+                    <h3 class="text-xl font-bold mb-2">Mudar nome</h3>
+                    <p class="text-gray-600">Atualize o nome</p>
+                </div>
+            </div>
+           
+        </div>
+        <div id="listaUsuariosModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+            <div class="bg-white p-8 rounded-lg shadow-lg w-[800px] relative">
+                <button type="button" onclick="closeModal('listaUsuariosModal')" 
+                        class="absolute top-4 right-4 text-gray-600 hover:text-red-600">
+                    ✖
+                </button>
+                <h2 class="text-2xl font-bold mb-6">Lista de Usuários</h2>
                 
-                <div class="bg-white rounded-lg shadow-lg hover:shadow-2xl py-20 transform hover:scale-105 transition p-5  w-full cursor-pointer"
-                        onclick="openModal('senhaModal')">
-                    <div class="flex flex-col items-center">
-                        <i class="fas fa-lock text-5xl text-blue-600 mb-6"></i>
-                        <h3 class="text-xl font-bold mb-2">Mudar Senha</h3>
-                        <p class="text-gray-600">Atualize sua senha de forma rápida e segura.</p>
-                    </div>
-                </div>
-
-                 <div class="bg-white rounded-lg shadow-lg hover:shadow-2xl py-20 transform hover:scale-105 transition p-5  w-full cursor-pointer"
-                        onclick="openModal('editanome')">
-                    <div class="flex flex-col items-center">
-                        <i class="fas fa-lock text-5xl text-blue-600 mb-6"></i>
-                        <h3 class="text-xl font-bold mb-2">Mudar nome</h3>
-                        <p class="text-gray-600">Atualize o nome</p>
-                    </div>
+                <div class="overflow-y-auto max-h-[500px]">
+                    {% include 'componente/lista_users.html' %}
                 </div>
             </div>
-            {% if usuario_atual == 'admin' %}
-            
-            <div id="usuarioModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
-                <form hx-post="{% url 'cria_novo_usuario' %}" hx-trigger="submit" hx-target="#mensagem-alerta" > {% csrf_token %}
-
-                    <div class="bg-white p-8 rounded-lg shadow-lg w-96 relative">
-            
-                        <!-- Botão para fechar o modal (X) -->
-                        <button type="button" onclick="closeModal('usuarioModal')" 
-                                class="absolute top-4 right-4 text-gray-600 hover:text-red-600">
-                            ✖
-                        </button>
-                        <div id="mensagem-alerta" class="mt-4">
-                            {% include 'componente/alerta.html' %}
-                        </div>
-                        <h2 class="text-xl font-bold mb-4">Criar Usuário Novo</h2>
-                        <input type="text" placeholder="Nome de Usuário" name="nome" class="w-full p-2 border rounded mb-4" required>
-                        <input type="password" placeholder="senha" name="senha" class="w-full p-2 border rounded mb-4" required>
-                        <input type="password" placeholder="confirma Senha" name="confirmasenha" class="w-full p-2 border rounded mb-4" required>
-                        <select name="tipouser" class="w-full p-2 border rounded mb-4">
-                            <option value="" disabled selected>Selecione o tipo de usuário</option>
-                            <option value="admin">Admin</option>
-                            <option value="funcionario">Funcionário</option>
-                        </select required>
-                                                
-                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-800 transition">
-                            Criar
-                        </button>
-                        <button onclick="closeModal('usuarioModal')" class="ml-4 px-4 py-2 bg-gray-400 rounded hover:bg-gray-600 transition">
-                            Cancelar
-                        </button>
-                    </form>
-                </div>
-            </div>
-            {%endif%}
-
-            <div id="senhaModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
-                <form hx-post="{% url 'trocasenha' %}" hx-trigger="submit" hx-target="#mensagem-alerta" > {% csrf_token %}
-                  
-                    
-                    
-                    <div class="bg-white p-8 rounded-lg shadow-lg w-96 relative">
-                            <button type="button" onclick="closeModal('senhaModal')" 
-                                    class="absolute top-4 right-4 text-gray-600 hover:text-red-600">
-                                ✖
-                            </button>
-                    <h2 class="text-xl font-bold mb-4">Mudar Senha</h2>
-                    <div id="mensagem-alerta" class="mt-4">
-                        {% include 'componente/alerta.html' %}
-                    </div>
-                        <input type="password" placeholder="Senha antiga" name="senhaantiga" class="w-full p-2 border rounded mb-4">
-                        <input type="password" placeholder="Nova Senha" name="senhanova" class="w-full p-2 border rounded mb-4">
-                        <input type="password" placeholder="Confirma Nova Senha" name="senhaconfirmacao" class="w-full p-2 border rounded mb-4">
-                        <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-800 transition">
-                            Salvar
-                        </button>
-                        <button onclick="closeModal('senhaModal')" class="ml-4 px-4 py-2 bg-gray-400 rounded hover:bg-gray-600 transition">
-                            Cancelar
-                        </button>
-                    </div>
-                </form>
-            </div>
+        </div>
+        {% include 'componente/cria_novo_user_modal.html' %}
+        {% include 'componente/muda_senha_modal.html' %}
+        {% include 'componente/muda_nome_modal.html' %}
+  
+ 
     
-            <div id="editanome" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
-                <form hx-post="{% url 'editar_nome_usuario' %}" hx-trigger="submit" hx-target="#mensagem-alertas" > {% csrf_token %}
-                
-                    <div class="bg-white p-8 rounded-lg shadow-lg w-96 relative">
-                            <button type="button" onclick="closeModal('editanome')" 
-                                    class="absolute top-4 right-4 text-gray-600 hover:text-red-600">
-                                ✖
-                            </button>
-                    <h2 class="text-xl font-bold mb-4">Mudar nome</h2>
-                    <div id="mensagem-alertas" class="mt-4">
-                        {% include 'componente/alerta.html' %}
-                    </div>
-                    
-                    
-                        <input type="text" placeholder="Novo nome" name="novoNome" class="w-full p-2 border rounded mb-4">
-                        <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-800 transition">
-                            Salvar
-                        </button>
-                        <button onclick="closeModal('editanome')" class="ml-4 px-4 py-2 bg-gray-400 rounded hover:bg-gray-600 transition">
-                            Cancelar
-                        </button>
-                    </div>
-                </form>
-            </div>
+<script>
+    function openModal(modalId) {
+        document.getElementById(modalId).classList.remove('hidden');
+    }
 
-        </div>
-     
-        {% include 'componente/lista_users.html' %}
-        </div>
-    <script>
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.remove('hidden');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
-        }
-    </script>
-</body>
-</html>
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+    }
+</script>
+{%endblock%}

@@ -73,6 +73,10 @@ def deleta_produto(request):
         messages.success(request, f'Produto ( {nome_produto} ) deletado com sucesso')
         return redirect('view_produto')
 
+def cards_produto(request):
+    return render(request, 'view_produtos.html')
+    
+
 def cadastra_produtoXml(request):
     if request.method == 'POST':
         arquivo = request.FILES.get('arquivoxml')
@@ -91,7 +95,7 @@ def cadastra_produtoXml(request):
         messages.success(request, 'Cadastrados')
         return redirect('view_produto')
     
-    
+
 def cria_fornecedor(request):
     if request.method == 'POST': 
         nome = request.POST.get('nome')

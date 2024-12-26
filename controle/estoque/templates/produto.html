@@ -2,10 +2,11 @@
 {% load static %}
 
 {% block content %}
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl p-6">
-        {% include 'componente/alerta_global.html'%}
+<div  class="justify-center py-5 gap-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
+    
+
     <!-- Card de Produtos -->
-    <div class="bg-white shadow-md rounded-lg p-6 h-96 overflow-y-auto">
+    <div class="bg-white shadow-md rounded-lg p-6 h-96 overflow-y-auto  ml-6" >
         <h2 class="text-xl font-bold mb-4">Produtos Cadastrados</h2>
         <ul class="space-y-4">
            {% include 'componente/lista_produtos_crud.html' %}

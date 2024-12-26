@@ -1,0 +1,26 @@
+<div id="senhaModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+    <form hx-post="{% url 'trocasenha' %}" hx-trigger="submit" hx-target="#mensagem-alerta" > {% csrf_token %}
+      
+        
+        
+        <div class="bg-white p-8 rounded-lg shadow-lg w-96 relative">
+                <button type="button" onclick="closeModal('senhaModal')" 
+                        class="absolute top-4 right-4 text-gray-600 hover:text-red-600">
+                    ✖
+                </button>
+        <h2 class="text-xl font-bold mb-4">Mudar Senha</h2>
+        <div id="mensagem-alerta" class="mt-4">
+            {% include 'componente/alerta.html' %}
+        </div>
+            <input type="password" placeholder="Senha antiga" name="senhaantiga" class="w-full p-2 border rounded mb-4">
+            <input type="password" placeholder="Nova Senha" name="senhanova" class="w-full p-2 border rounded mb-4">
+            <input type="password" placeholder="Confirma Nova Senha" name="senhaconfirmacao" class="w-full p-2 border rounded mb-4">
+            <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-800 transition">
+                Salvar
+            </button>
+            <button onclick="closeModal('senhaModal')" class="ml-4 px-4 py-2 bg-gray-400 rounded hover:bg-gray-600 transition">
+                Cancelar
+            </button>
+        </div>
+    </form>
+</div>
