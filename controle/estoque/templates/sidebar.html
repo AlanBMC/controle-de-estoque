@@ -1,0 +1,110 @@
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+      .hide-text {
+        display: none;
+      }
+      .sidebar.shrink {
+        width: 5rem;  /* Sidebar menor */
+      }
+      .sidebar.shrink .menu-text {
+        display: none;
+      }
+      .sidebar .menu-text {
+        transition: opacity 0.3s;
+      }
+      .sidebar {
+    background-color: #a67c52; /* Cor de café */
+    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.2); /* Sombra lateral */
+}
+
+/* Botões e Links */
+.sidebar a {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+
+.sidebar a:hover {
+    background-color: #8c6343;  /* Escurece ao passar o mouse */
+    transform: translateY(-2px); /* Efeito de elevação */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra ao passar o mouse */
+}
+
+/* Botão Toggle */
+.sidebar button {
+    color: white;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar button:hover {
+    transform: scale(1.05);  /* Leve crescimento */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Botão de Logout */
+.logout {
+    background-color: #b45309;  /* Cor café forte */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.logout:hover {
+    background-color: #8a3706;  /* Tom mais escuro */
+    transform: translateY(-2px);
+}
+    </style>
+</head>
+
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar  w-50 bg-gray-500 text-white flex h-screen flex-col">
+  <!-- Logo -->
+  <div class="p-4 flex items-center justify-between">
+    <span class="text-lg font-bold">Logo</span>
+    <button onclick="toggleSidebar()" class="p-2  rounded">
+      <i id="toggle-icon" class="fas fa-bars"></i>
+    </button>
+  </div>
+  
+  <!-- Menu -->
+  <nav class="flex-1 px-2 space-y-2">
+    <a href="{% url 'home' %}" class="flex items-center p-2 space-x-3 rounded">
+      <i class="fas fa-home"></i>
+      <span class="menu-text">Home</span>
+    </a>
+    <a href="{% url 'movimento_estoque' %}" class="flex items-center p-2 space-x-3 rounded">
+      <i class="fas fa-user"></i>
+      <span class="menu-text">Perfil</span>
+    </a>
+    <a href="{% url 'configuracao' %}" class="flex items-center p-2 space-x-3 rounded">
+      <i class="fas fa-cog"></i>
+      <span class="menu-text">Configurações</span>
+    </a> 
+    <a href="{% url 'view_produto' %}" class="flex items-center p-2 space-x-3 rounded">
+      <i class="fa-solid fa-cart-plus"></i>
+      <span class="menu-text">Cadastrar Produtos</span>
+    </a> 
+  </nav>
+
+  <!-- Logout -->
+  <div class="p-4 mt-auto">
+    <a href="{% url 'logout' %}" style="background-color: #dc2626" class="logout flex items-center p-2 space-x-3 rounded">
+      <i class="fas fa-sign-out-alt"></i>
+      <span class="menu-text">Sair</span>
+    </a>
+  </div>
+</div>
+
+<!-- Script -->
+<script>
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const toggleIcon = document.getElementById('toggle-icon');
+    
+    // Alterna a classe shrink
+    sidebar.classList.toggle('shrink');
+
+    // Alterna o ícone de barras/voltar
+    toggleIcon.classList.toggle('fa-angle-left');
+    toggleIcon.classList.toggle('fa-bars');
+  }
+</script>

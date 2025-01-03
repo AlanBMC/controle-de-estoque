@@ -1,0 +1,68 @@
+<div class="bg-white shadow-lg rounded-lg p-8 col-span-2">
+    <h2 class="text-2xl font-bold mb-6 text-center">Cadastrar Novo Produto</h2>
+    <form method="POST" action="{% url 'cria_produto' %}" >
+        {% csrf_token %}
+        <div class="mb-4">
+            <label for="nome" class="block text-sm font-medium text-gray-700">Nome do Produto</label>
+            <input type="text" id="nome" name="nome" required 
+                   class="mt-1 block w-full p-2 border rounded-md">
+        </div>
+        
+        <div class="mb-4">
+            <label for="ean" class="block text-sm font-medium text-gray-700">Codigo de barra</label>
+            <input type="number" id="ean" name="ean" required 
+                   class="mt-1 block w-full p-2 border rounded-md">
+        </div>
+        <div class="mb-4">
+            <label for="quantidade" class="block text-sm font-medium text-gray-700">Quantidade</label>
+            <input type="number" id="quantidade" name="quantidade" required 
+                   class="mt-1 block w-full p-2 border rounded-md">
+        </div>
+        <div class="mb-4">
+            <label for="vencimento" class="block text-sm font-medium text-gray-700">Data de Vencimento</label>
+            <input type="date" id="vencimento" name="vencimento" required 
+                   class="mt-1 block w-full p-2 border rounded-md">
+        </div>
+        
+        <div class="mb-4 relative" >
+            <label for="fornecedor" class="block text-sm font-medium text-gray-700">Fornecedor</label>
+            <div class="flex space-x-2">
+                <select id="fornecedor" name="id_fornecedor" required 
+                        class="mt-1 block w-full p-2 border rounded-md">
+                    <option value="" disabled selected>Selecione um fornecedor</option>
+                    {% for fornecedor in fornecedores %}
+                        <option value="{{ fornecedor.id }}">{{ fornecedor.nome }}</option>
+                    {% endfor %}
+                </select>
+                
+                <!-- Botão para adicionar novo fornecedor -->
+                <button type="button" onclick="openModal('novoFornecedorModal')" 
+                        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800 transition">
+                    +
+                </button>
+            </div>
+        </div>
+        
+        <div class="flex justify-center">
+            <button type="submit" 
+                    class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-800 transition">
+                Cadastrar
+            </button>
+        </div>
+        
+    </form>
+    <div class="mb-4" style="padding-top: 5px;">
+        <form action="{%url 'cadastra_produtoXml' %}" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+            <label for="arquivo" class="block text-sm font-medium text-gray-700">Importar Arquivo (XML ou CSV)</label>
+            <input type="file" id="arquivo" name="arquivoxml" accept=".xml, .csv" required 
+            class="mt-1 block w-full p-2 border rounded-md">
+            <p class="text-sm text-gray-500 mt-1">Envie arquivos no formato .xml ou .csv.</p>
+            <div class="flex justify-center">
+                <button type="submit" 
+                        class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-800 transition">
+                    Enviar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,137 @@
+<style>
+ #editaProdutoModal {
+    z-index: 1050;  /* Alta prioridade para o modal */
+}
+#deleteModalProduto {
+    z-index: 1050;  /* Alta prioridade para o modal */
+}
+</style>
+{% if produtos %}
+{% for produto in produtos %}
+<li class="p-4 bg-gray-50 rounded-lg shadow flex justify-between items-center " style=" z-index: 1050"> 
+    <div>
+        <p><strong>Produto:</strong> {{produto.nome}}</p>
+        <p><strong>Quantidade:</strong> {{produto.quantidade}}</p>
+        <p><strong>Vencimento: </strong>  {{produto.vencimento}}</p>
+    </div>
+    <div class="flex space-x-4">
+        <button class="text-blue-500 hover:text-blue-700 text-lg"
+                onclick="preencheModal('{{ produto.id }}',
+                 '{{ produto.nome }}',
+                  '{{ produto.quantidade }}',
+                   '{{ produto.vencimento }}',
+                    '{{produto.fornecedor_id}}')">
+            <i class="fas fa-edit"></i>
+        </button>
+        <button class="text-red-500 hover:text-red-700 text-lg" onclick="deletaProduto('{{produto.id}}')" >
+            <i class="fas fa-trash-alt"></i>
+        </button>
+    </div>
+</li>
+{% endfor %}
+{% else %}
+    <p>Sem produtos</p>
+{% endif %}
+
+<!-- Modal de Edição -->
+<div id="editaProdutoModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+    <form method="POST" action="{% url 'edita_produto' %}">
+        {% csrf_token %}
+        <div class="bg-white p-8 rounded-lg shadow-lg w-96 relative">
+            
+            <!-- Botão Fechar Modal -->
+            <button type="button" onclick="closeModal('editaProdutoModal')" 
+                    class="absolute top-4 right-4 text-gray-600 hover:text-red-600">
+                ✖
+            </button>
+
+            <h2 class="text-xl font-bold mb-4">Atualizar Produto</h2>
+
+            <!-- Campo Oculto para ID do Produto -->
+            <input type="hidden" id="produto_id" name="produto_id" value="">
+
+            <div class="mb-4">
+                <label for="nome_produto" class="block text-sm font-medium text-gray-700">Nome</label>
+                <input type="text" id="nome_produto" name="nome" required 
+                       class="mt-1 block w-full p-2 border rounded-md">
+            </div>
+
+            <div class="mb-4">
+                <label for="quantidade" class="block text-sm font-medium text-gray-700">Quantidade</label>
+                <input type="number" id="quantidade_produto" name="quantidade" 
+                       class="mt-1 block w-full p-2 border rounded-md">
+            </div>
+
+            <div class="mb-4">
+                <label for="vencimento" class="block text-sm font-medium text-gray-700">Vencimento</label>
+                <input type="date" id="vencimento_produto" name="vencimento" 
+                       class="mt-1 block w-full p-2 border rounded-md" required>
+            </div>
+
+            <select id="fornecedor" name="id_fornecedor" required 
+                            class="mt-1 block w-full p-2 border rounded-md">
+                        <option value="" disabled selected>Selecione um fornecedor</option>
+                        {% for fornecedor in fornecedores %}
+                            <option value="{{ fornecedor.id }}">{{ fornecedor.nome }}</option>
+                        {% endfor %}
+                    </select>
+
+            <div class="flex justify-center">
+                <button type="submit" 
+                        class="px-6  py-2 bg-green-600 text-white rounded-lg hover:bg-green-800 transition">
+                    Salva
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="deleteModalProduto" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+    <form action="{% url 'deleta_produto' %}" method="POST"> {% csrf_token %}
+        <div class="bg-white p-8 rounded-lg shadow-lg w-96 relative">
+            <input type="hidden" id="deleta_produtoID" name="produto_id">
+            <!-- Botão Fechar Modal -->
+            <button type="button" onclick="closeModal('deleteModalProduto')" 
+                    class="absolute top-4 right-4 text-gray-600 hover:text-red-600">
+                ✖
+            </button>
+            <h2 class="text-xl font-bold mb-4">Tem certeza que deseja deletar o produto ?</h2>
+            <div class="flex justify-center">
+                <button type="submit" 
+                        class="px-6  py-2 bg-green-600 text-white rounded-lg hover:bg-green-800 transition">
+                    Ok
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- Script para Preencher e Exibir o Modal -->
+<script>
+    function preencheModal(id, nome, quantidade, vencimento, fornecedor) {
+        // Preenche os campos do modal com os dados do produto
+        document.getElementById('produto_id').value = id;
+        document.getElementById('nome_produto').value = nome;
+        document.getElementById('quantidade_produto').value = quantidade;
+        let dataFormatada = new Date(vencimento).toISOString().split('T')[0];
+        document.getElementById('vencimento_produto').value = dataFormatada;
+        console.log(fornecedor)
+        let selectFornecedor = document.getElementById('fornecedor');
+        for (let i = 0; i < selectFornecedor.options.length; i++) {
+            if (selectFornecedor.options[i].value == fornecedor) {
+                selectFornecedor.options[i].selected = true;
+                break;
+            }
+        }
+        // Exibe o modal
+        document.getElementById('editaProdutoModal').classList.remove('hidden');
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+    }
+    function deletaProduto(id_produto){ 
+        console.log('produto ',id_produto)
+        document.getElementById('deleta_produtoID').value = id_produto;
+        document.getElementById('deleteModalProduto').classList.remove('hidden');
+    }
+</script>
